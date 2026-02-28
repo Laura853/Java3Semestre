@@ -1,6 +1,7 @@
 package br.com.fiap.api_rest.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -14,7 +15,7 @@ public class Produto {
     @Column(name = "id")
     private UUID id;
     @Column(name = "nome_produto")
-    private String nome_produto;
+    private String nome;
     @Column(name = "preco")
     private BigDecimal preco;
     @Column(name = "expiracao")
@@ -24,7 +25,7 @@ public class Produto {
     }
 
     public Produto(String nome_produto, BigDecimal preco, LocalDate expiracao) {
-        this.nome_produto = nome_produto;
+        this.nome = nome_produto;
         this.preco = preco;
         this.expiracao = expiracao;
     }
@@ -37,12 +38,12 @@ public class Produto {
         this.id = id;
     }
 
-    public String getNome_produto() {
-        return nome_produto;
+    public String getNome() {
+        return nome;
     }
 
-    public void setNome_produto(String nome_produto) {
-        this.nome_produto = nome_produto;
+    public void setNome(String nome_produto) {
+        this.nome = nome_produto;
     }
 
     public BigDecimal getPreco() {
