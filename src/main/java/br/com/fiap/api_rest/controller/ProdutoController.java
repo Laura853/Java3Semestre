@@ -1,10 +1,15 @@
 package br.com.fiap.api_rest.controller;
 
 import br.com.fiap.api_rest.dto.ProdutoRequest;
+import br.com.fiap.api_rest.dto.ProdutoResponse;
 import br.com.fiap.api_rest.model.Produto;
 import br.com.fiap.api_rest.service.ProdutoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +20,12 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/produtos")
 public class ProdutoController {
-    @Autowired
-    private ProdutoService produtoService;
+
+    private final ProdutoService produtoService;
+
+    public ProdutoController(ProdutoService produtoService) {
+        this.produtoService = produtoService;
+    }
 
     @PostMapping
     public ResponseEntity<Produto> createProduto(@Valid @RequestBody ProdutoRequest produto) {
@@ -25,26 +34,29 @@ public class ProdutoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Produto> readProduto(@PathVariable UUID id) {
-        Produto produto = produtoService.read(id);
+    public ResponseEntity<ProdutoResponse> readProduto(@PathVariable UUID id) {
+        ProdutoResponse produto = produtoService.read(id);
         if (produto == null) {
             return new ResponseEntity<>(produto, HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(produto, HttpStatus.OK);
     }
 
+    //@PathVariable localhost: 8080/produtos/1
+    //@RequestParam localhost:8080/produtos?param=x&outroParam=y
     @GetMapping
-    public ResponseEntity<List<Produto>> readProduto() {
-        List<Produto> produtos = produtoService.read();
+    public ResponseEntity<Page<ProdutoResponse>> readProduto(@RequestParam(defaultValue = "0") Integer pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber, 2, Sort.by("nome").ascending());
+        Page<ProdutoResponse> produtos = produtoService.read(pageable);
         if (produtos.isEmpty()) {
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(produtoService.read(), HttpStatus.OK);
+        return new ResponseEntity<>(produtos, HttpStatus.OK);
     }
 
     @PutMapping
     public ResponseEntity<Produto> updateProduto(@RequestBody Produto produto) {
-        Produto produtoExistente = produtoService.read(produto.getId());
+        ProdutoResponse produtoExistente = produtoService.read(produto.getId());
         if (produtoExistente == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
