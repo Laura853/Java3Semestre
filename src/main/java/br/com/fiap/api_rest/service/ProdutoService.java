@@ -4,9 +4,12 @@ import br.com.fiap.api_rest.dto.ProdutoRequest;
 import br.com.fiap.api_rest.dto.ProdutoResponse;
 import br.com.fiap.api_rest.mapper.ProdutoMapper;
 import br.com.fiap.api_rest.model.Produto;
+
 import br.com.fiap.api_rest.repository.ProdutoRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -40,9 +43,17 @@ public class ProdutoService {
         return produtoMapper.produtoToResponse(produto.get());
     }
 
+<<<<<<< HEAD
     public List<ProdutoResponse> read() {
         List<Produto> produtos = produtoRepository.findAll();
         return produtos.stream().map(produtoMapper::produtoToResponse).collect(Collectors.toList());
+=======
+    // Page, Pageable
+    public Page<ProdutoResponse> read(Pageable pageable) {
+        return produtoRepository
+                .findAll(pageable)
+                .map(produtoMapper::produtoToResponse);
+>>>>>>> master
     }
 
     /*
