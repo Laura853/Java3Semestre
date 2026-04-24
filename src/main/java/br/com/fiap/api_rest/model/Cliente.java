@@ -1,49 +1,43 @@
 package br.com.fiap.api_rest.model;
 
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.Email;
-
+import jakarta.persistence.*;
+import java.util.List;
 import java.time.LocalDate;
-import java.util.UUID;
 
+
+@Entity
+@Table(name = "tb_clientes")
 public class Cliente {
-    @Column(name = "id")
-    private UUID id;
-    @Column(name = "nome_cli")
-    private String nome;
-    @Email
-    @Column(name = "email_cli")
-    private String email;
-    @Column(name = "cpf_cli")
+    @Id
     private String cpf;
-    @Column(name = "dt_nasc_cli")
-    private LocalDate dtNasc;
-    @Column(name = "tel_cli")
-    private String telefone;
 
-    public Cliente(UUID id, String name, String email, String cpf, LocalDate dt_nasc, String telefone) {
-        this.id = id;
-        this.nome = nome;
-        this.email = email;
+    private String nome;
+
+    private String email;
+
+    private LocalDate dataNascimento;
+
+    private String Telefone;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_endereco")
+    private Endereco endereco;
+    @OneToMany(mappedBy = "cliente")
+    private List<Pedido> pedidos;
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
         this.cpf = cpf;
-        this.dtNasc = dtNasc;
-        this.telefone = telefone;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
+    public String getNome() {
         return nome;
     }
 
-    public void setName(String name) {
-        this.nome = name;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getEmail() {
@@ -54,27 +48,27 @@ public class Cliente {
         this.email = email;
     }
 
-    public String getCpf() {
-        return cpf;
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public LocalDate getDt_nasc() {
-        return dtNasc;
-    }
-
-    public void setDt_nasc(LocalDate dt_nasc) {
-        this.dtNasc = dt_nasc;
+    public void setDataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
     }
 
     public String getTelefone() {
-        return telefone;
+        return Telefone;
     }
 
     public void setTelefone(String telefone) {
-        this.telefone = telefone;
+        Telefone = telefone;
+    }
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
     }
 }

@@ -16,7 +16,7 @@ public class ProdutoMapper {
     public ProdutoResponse produtoToResponse(Produto produto) {
         //Link para a lista de produtos, ou seja, o métodoo read(pageable) do controller
         Link link = linkTo(methodOn(ProdutoController.class).readProduto(0)).withRel("Lista de produtos");
-        return new ProdutoResponse(produto.getId(), produto.getNome(), produto.getPreco(), link);
+        return new ProdutoResponse(produto.getId(), produto.getNome(), produto.getPreco(), link );
     }
 
     public ProdutoLista produtoToProdutoista(Produto produto){

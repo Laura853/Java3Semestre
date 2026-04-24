@@ -1,34 +1,26 @@
 package br.com.fiap.api_rest.model;
 
-import jakarta.persistence.Column;
-
-import java.math.BigDecimal;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+@Entity
+@Table(name = "TD_PEDIDOS")
 public class Pedido {
-
-    @Column(name = "id_ped")
+    @Id
     private UUID id;
-    @Column(name = "stt_ped")
-    private String status;//pago
-    @Column(name = "dt_ped")
+    private StatusPedido status;
     private LocalDateTime data;
-    @Column(name = "prod_ped")
-    private List<Produto> produto;
-    //list produto;
-    @Column(name = "val_ped")
-    private BigDecimal valor;
-
-
-    public Pedido(UUID id, String status, LocalDateTime data, BigDecimal valor) {
-        this.id = id;
-        this.status = status;
-        this.data = data;
-        this.valor = valor;
-    }
+    private double valor;
+    @ManyToOne
+    @JoinColumn(name = "id_cliente")
+    private Cliente cliente;
+    @ManyToMany
+    @JoinTable(name = "produto_pedido",
+            joinColumns = @JoinColumn(name = "id_produto", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "id_pedido", referencedColumnName = "id"))
+    private List<Produto> produtos;
 
     public UUID getId() {
         return id;
@@ -38,11 +30,11 @@ public class Pedido {
         this.id = id;
     }
 
-    public String getStatus() {
+    public StatusPedido getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(StatusPedido status) {
         this.status = status;
     }
 
@@ -54,11 +46,28 @@ public class Pedido {
         this.data = data;
     }
 
-    public BigDecimal getValor() {
+    public double getValor() {
         return valor;
     }
 
-    public void setValor(BigDecimal valor) {
+    public void setValor(double valor) {
         this.valor = valor;
     }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public List<Produto> getProdutos() {
+        return produtos;
+    }
+
+    public void setProdutos(List<Produto> produtos) {
+        this.produtos = produtos;
+    }
+
 }

@@ -1,25 +1,37 @@
 package br.com.fiap.api_rest.model;
 
-import jakarta.persistence.Column;
+import jakarta.persistence.*;
 
 import java.util.UUID;
 
+@Entity
+@Table(name = "tb_enderecos")
+
 public class Endereco {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id_end")
     private UUID id;
+
     @Column(name = "logr_end")
     private String logradouro;
+
     @Column(name = "num_end")
     private String numero;
+
     @Column(name = "comp_end")
     private String complemento;
+
     @Column(name = "cid_end")
     private String cidade;
+
     @Column(name = "bairro_end")
     private String bairro;
+
     @Column(name = "est_end")
     private String estado;
+
     @Column(name = "cep_end")
     private String cep;
 
