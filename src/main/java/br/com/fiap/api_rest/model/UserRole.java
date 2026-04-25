@@ -1,0 +1,14 @@
+package br.com.fiap.api_rest.model;
+
+import jakarta.persistence.Entity;
+
+public enum UserRole {
+    ADMIN("admin"),
+    USER("user");
+
+    private final String role;
+
+    UserRole(String role){ this.role = role;}
+
+    public String getRole(){return role;}
+}
