@@ -1,10 +1,13 @@
 package br.com.fiap.api_rest.controller;
 
 import br.com.fiap.api_rest.dto.AuthDTO;
+import br.com.fiap.api_rest.dto.LoginResponseDTO;
 import br.com.fiap.api_rest.dto.RegisterDTO;
 import br.com.fiap.api_rest.model.Usuario;
 import br.com.fiap.api_rest.repository.UsuarioRepository;
+import br.com.fiap.api_rest.service.TokenService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,7 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
     private final UsuarioRepository usuarioRepository;
+    @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private TokenService tokenService;
 
     public AuthController(UsuarioRepository usuarioRepository){
         this.usuarioRepository = usuarioRepository;
@@ -32,7 +39,10 @@ public class AuthController {
 
         //Autentica esse token
         var auth = this.authenticationManager.authenticate(usuarioSenha);
-        return ResponseEntity.ok().build();
+
+        var token = tokenService.generateToken((Usuario) auth.getPrincipal());
+        return ResponseEntity.ok(new LoginResponseDTO(token));
+
 
     }
 
